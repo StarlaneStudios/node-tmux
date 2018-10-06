@@ -20,7 +20,7 @@ class Tmux {
 	 * @param command Optional command to execute
 	 */
 	public async createSession(name: string, command?: string) : Promise<void> {
-		if(this.sessionExits(name)) throw new Error("Session already exists");
+		if(this.sessionExits(name)) throw new Error(`Session '${name}' already exists`);
 		await this._exec(`tmux new -s ${name}` + (command ? ` ${command}` : ''));
 	}
 
@@ -48,7 +48,7 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async killSession(name: string) : Promise<void> {
-		if(!this.sessionExits(name)) throw new Error("Session does not exist");
+		if(!this.sessionExits(name)) throw new Error(`Session '${name}'does not exist`);
 		await this._exec(`tmux kill-session -s ${name}`);
 	}
 
@@ -60,6 +60,7 @@ class Tmux {
 	 * @param newline Whether the end with an eneter (Execute input). Defaults to false
 	 */
 	public async writeInput(name: string, print: string, newline: boolean = false) : Promise<void> {
+		if(!this.sessionExits(name)) throw new Error(`Session '${name}'does not exist`);
 		await this._exec(`tmux send-keys -s ${name} "${print}"` + (newline ? ' Enter' : ''));
 	}
 
