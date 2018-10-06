@@ -1,4 +1,4 @@
-import { tmux } from "./tmux";
+import { tmux } from "./src/tmux";
 
 tmux({
 	shell: 'C:\\cygwin64\\bin\\mintty.exe'
