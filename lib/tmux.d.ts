@@ -10,12 +10,13 @@ declare class Tmux {
      * Create a new session of the given name
      *
      * @param name Session name
+     * @param command Optional command to execute
      */
-    createSession(name: string): Promise<void>;
+    createSession(name: string, command?: string): Promise<void>;
     /**
      * List of sessions currently active
      */
-    listSessions(): Promise<string[]>;
+    getSessions(): Promise<string[]>;
     /**
      * Returns whether a session with the given name exists
      *

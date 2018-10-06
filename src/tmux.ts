@@ -1,7 +1,5 @@
 import Options from "./options";
-import { promisify } from "util";
 import {exec} from "child_process";
-import { rejects } from "assert";
 
 /**
  * An adapter class containing methods to execute common
@@ -19,18 +17,19 @@ class Tmux {
 	 * Create a new session of the given name
 	 * 
 	 * @param name Session name
+	 * @param command Optional command to execute
 	 */
-	public async createSession(name: string) : Promise<void> {
+	public async createSession(name: string, command?: string) : Promise<void> {
 		if(this.sessionExits(name)) throw new Error("Session already exists");
-		await this._exec(`tmux new -s ${name}`);
+		await this._exec(`tmux new -s ${name}` + (command ? ` ${command}` : ''));
 	}
 
 	/**
 	 * List of sessions currently active
 	 */
-	public async listSessions() : Promise<string[]> {
+	public async getSessions() : Promise<string[]> {
 		const out = await this._exec(`tmux ls -F "#S"`);
-		return out.split('\n');
+		return out.split('\n').filter(s => !!s);
 	}
 
 	/**
@@ -39,7 +38,7 @@ class Tmux {
 	 * @param name Session to check
 	 */
 	public async sessionExits(name: string) : Promise<boolean> {
-		const list = await this.listSessions();
+		const list = await this.getSessions();
 		return list.indexOf(name) != -1;
 	}
 
@@ -88,7 +87,7 @@ class Tmux {
  * cannot be found or executed properly.
  */
 export function tmux(options: Options = {}) : Promise<Tmux|null> {
-	return new Promise((success, reject) => {
+	return new Promise((success) => {
 		let process = exec('tmux ls', options);
 
 		process.on('exit', (code) => {
