@@ -1,1 +1,1 @@
-module.exports = require('./lib/tmux.js').Tmux;
+module.exports = require('./lib/tmux.js');
