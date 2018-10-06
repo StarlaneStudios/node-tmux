@@ -1,0 +1,20 @@
+{
+	"name": "node-tmux",
+	"version": "1.0.0",
+	"description": "Lightweight NodeJS tmux wrapper",
+	"main": "index.js",
+	"repository": "https://github.com/ExodiusStudios/node-tmux.git",
+	"author": "Julian Mills <minecraftmacjuul@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"test": "jest"
+	},
+	"devDependencies": {
+		"@types/node": "^10.11.4",
+		"typescript": "^3.1.1"
+	},
+	"dependencies": {
+		"command-exists": "^1.2.7"
+	}
+}
