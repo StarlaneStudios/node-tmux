@@ -8,7 +8,7 @@
 	"license": "MIT",
 	"private": false,
 	"scripts": {
-		"test": "jest"
+		"build": "tsc -p ./tsconfig.json"
 	},
 	"devDependencies": {
 		"@types/node": "^10.11.4",
