@@ -1,7 +1,7 @@
 {
 	"name": "node-tmux",
 	"version": "1.0.0",
-	"description": "Lightweight NodeJS tmux wrapper",
+	"description": "Lightweight tmux session management wrapper",
 	"main": "index.js",
 	"repository": "https://github.com/ExodiusStudios/node-tmux.git",
 	"author": "Julian Mills <minecraftmacjuul@gmail.com>",

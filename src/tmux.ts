@@ -1,4 +1,4 @@
-import Options from "./options";
+import NodeTmuxOptions from "./options";
 import {exec} from "child_process";
 
 /**
@@ -7,10 +7,10 @@ import {exec} from "child_process";
  */
 class Tmux {
 
-	private options: Options;
+	private options: NodeTmuxOptions;
 
-	constructor(options: Options) {
-		this.options = options;
+	constructor(options: NodeTmuxOptions) {
+		this.options = {command: "tmux", ...options};
 	}
 
 	/**
@@ -19,16 +19,21 @@ class Tmux {
 	 * @param name Session name
 	 * @param command Optional command to execute
 	 */
-	public async createSession(name: string, command?: string) : Promise<void> {
-		if(this.sessionExits(name)) throw new Error(`Session '${name}' already exists`);
-		await this._exec(`tmux new -s ${name}` + (command ? ` ${command}` : ''));
+	public async newSession(name: string, command?: string) : Promise<void> {
+		if(this.isSession(name)) {
+			throw new Error(`Session '${name}' already exists`);
+		}
+
+		const ext = command ? ` ${command}` : '';
+
+		await this._exec(`${this.options.command} new -s ${name}` + ext);
 	}
 
 	/**
 	 * List of sessions currently active
 	 */
 	public async getSessions() : Promise<string[]> {
-		const out = await this._exec(`tmux ls -F "#S"`);
+		const out = await this._exec(`${this.options.command} ls -F "#S"`);
 		return out.split('\n').filter(s => !!s);
 	}
 
@@ -37,7 +42,7 @@ class Tmux {
 	 * 
 	 * @param name Session to check
 	 */
-	public async sessionExits(name: string) : Promise<boolean> {
+	public async isSession(name: string) : Promise<boolean> {
 		const list = await this.getSessions();
 		return list.indexOf(name) != -1;
 	}
@@ -48,8 +53,11 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async killSession(name: string) : Promise<void> {
-		if(!this.sessionExits(name)) throw new Error(`Session '${name}'does not exist`);
-		await this._exec(`tmux kill-session -s ${name}`);
+		if(!this.isSession(name)) {
+			throw new Error(`Session '${name}'does not exist`);
+		}
+
+		await this._exec(`${this.options.command} kill-session -s ${name}`);
 	}
 
 	/**
@@ -60,8 +68,13 @@ class Tmux {
 	 * @param newline Whether the end with an eneter (Execute input). Defaults to false
 	 */
 	public async writeInput(name: string, print: string, newline: boolean = false) : Promise<void> {
-		if(!this.sessionExits(name)) throw new Error(`Session '${name}'does not exist`);
-		await this._exec(`tmux send-keys -s ${name} "${print}"` + (newline ? ' Enter' : ''));
+		if(!this.isSession(name)) {
+			throw new Error(`Session '${name}'does not exist`);
+		}
+
+		const ext = newline ? ' Enter' : '';
+
+		await this._exec(`${this.options.command} send-keys -s ${name} "${print}"` + ext);
 	}
 
 	/**
@@ -87,15 +100,17 @@ class Tmux {
  * Create a new Tmux instance with the given options. Returns null when the tmux command
  * cannot be found or executed properly.
  */
-export function tmux(options: Options = {}) : Promise<Tmux|null> {
-	return new Promise((success) => {
-		let process = exec('tmux ls', options);
+export function tmux(options: NodeTmuxOptions = {}) : Promise<Tmux> {
+	return new Promise((success, reject) => {
+		let process = exec(`${options.command || "tmux"} ls`, {
+			shell: options.shell
+		});
 
 		process.on('exit', (code) => {
 			if(code == 0) {
 				success(new Tmux(options));
 			} else {
-				success(null);
+				reject(new Error("Failed to locate tmux command"));
 			}
 		});
 	});
