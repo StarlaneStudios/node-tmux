@@ -8,7 +8,7 @@ First, make sure the machine you are going to run this on has tmux installed. Wh
 
 You can install this package from npm
 ```
-npm install node-tmux
+npm install --save node-tmux
 ```
 
 ## Obtaining tmux instance
