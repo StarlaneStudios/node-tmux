@@ -31,7 +31,7 @@ class Tmux {
 
 		const ext = command ? ` ${command}` : '';
 
-		await this._exec(`${this.options.command} new -d -s ${name}` + ext);
+		await this._exec(`${this.options.command} new -d -s "${name}"` + ext);
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Tmux {
 		}
 
 		try {
-			await this._exec(`${this.options.command} has-session -t ${name}`);
+			await this._exec(`${this.options.command} has-session -t "${name}"`);
 			return true;
 		} catch(err) {
 			return false
@@ -73,7 +73,7 @@ class Tmux {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
-		await this._exec(`${this.options.command} kill-session -t ${name}`);
+		await this._exec(`${this.options.command} kill-session -t "${name}"`);
 	}
 
 	/**
@@ -88,7 +88,7 @@ class Tmux {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
-		await this._exec(`${this.options.command} rename-session -t ${name} ${newName}`);
+		await this._exec(`${this.options.command} rename-session -t "${name}" "${newName}"`);
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Tmux {
 
 		const ext = newline ? ' Enter' : '';
 
-		await this._exec(`${this.options.command} send-keys -t ${name} "${print}"` + ext);
+		await this._exec(`${this.options.command} send-keys -t "${name}" "${print}"` + ext);
 	}
 
 	/**
