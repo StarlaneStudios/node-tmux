@@ -26,7 +26,7 @@ class Tmux {
 
 		const ext = command ? ` ${command}` : '';
 
-		await this._exec(`${this.options.command} new -ds ${name}` + ext);
+		await this._exec(`${this.options.command} new -d -s ${name}` + ext);
 	}
 
 	/**
