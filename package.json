@@ -6,7 +6,14 @@
 	"repository": "https://github.com/ExodiusStudios/node-tmux.git",
 	"author": "Julian Mills <minecraftmacjuul@gmail.com>",
 	"license": "MIT",
-	"private": false,
+	"keywords": [
+		"tmux",
+		"wrapper",
+		"api",
+		"sessions",
+		"terminal",
+		"screen"
+	],
 	"scripts": {
 		"build": "tsc -p ./tsconfig.json"
 	},
