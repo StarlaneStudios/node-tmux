@@ -45,7 +45,7 @@ class Tmux {
 	 */
 	public async hasSession(name: string) : Promise<boolean> {
 		try {
-			await this._exec(`${this.options.command} has-session -s ${name}`);
+			await this._exec(`${this.options.command} has-session -t ${name}`);
 			return true;
 		} catch(err) {
 			return false
@@ -62,7 +62,7 @@ class Tmux {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
-		await this._exec(`${this.options.command} kill-session -s ${name}`);
+		await this._exec(`${this.options.command} kill-session -t ${name}`);
 	}
 
 	/**
@@ -75,7 +75,7 @@ class Tmux {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
-		await this._exec(`${this.options.command} rename-session -s ${name} ${newName}`);
+		await this._exec(`${this.options.command} rename-session -t ${name} ${newName}`);
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Tmux {
 
 		const ext = newline ? ' Enter' : '';
 
-		await this._exec(`${this.options.command} send-keys -s ${name} "${print}"` + ext);
+		await this._exec(`${this.options.command} send-keys -t ${name} "${print}"` + ext);
 	}
 
 	/**
