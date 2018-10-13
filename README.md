@@ -34,9 +34,10 @@ tmux().then(tm => {
 node-tmux currently supplies the following methods:
 
 - **newSession(name: string, command?: string)** - Creates a new tmux session with the given name
-- **getSessions()** - Returns an array listing all session names
-- **isSession(name: string)** - Returns whether a session by the given name exists
+- **listSessions()** - Returns an array listing all session names
+- **hasSession(name: string)** - Returns whether a session by the given name exists
 - **killSession(name: string)** - Kills the session with the given name
+- **renameSession(name: string, newName: string)** - Renames the session with the given name
 - **writeInput(name: string, print: string, newline: boolean = false)** - Write the specified string to the given session. Set newline to true to write a newline after this string (Usually triggers command execution).
 
 ## Compiling

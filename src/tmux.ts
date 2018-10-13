@@ -20,19 +20,19 @@ class Tmux {
 	 * @param command Optional command to execute
 	 */
 	public async newSession(name: string, command?: string) : Promise<void> {
-		if(await this.isSession(name)) {
+		if(await this.hasSession(name)) {
 			throw new Error(`Session '${name}' already exists`);
 		}
 
 		const ext = command ? ` ${command}` : '';
 
-		await this._exec(`${this.options.command} new -s ${name}` + ext);
+		await this._exec(`${this.options.command} new -ds ${name}` + ext);
 	}
 
 	/**
 	 * List of sessions currently active
 	 */
-	public async getSessions() : Promise<string[]> {
+	public async listSessions() : Promise<string[]> {
 		const out = await this._exec(`${this.options.command} ls -F "#S"`, true);
 		if(!out) return [];
 		return out.split('\n').filter(s => !!s);
@@ -43,9 +43,13 @@ class Tmux {
 	 * 
 	 * @param name Session to check
 	 */
-	public async isSession(name: string) : Promise<boolean> {
-		const list = await this.getSessions();
-		return list.indexOf(name) != -1;
+	public async hasSession(name: string) : Promise<boolean> {
+		try {
+			await this._exec(`${this.options.command} has-session -s ${name}`);
+			return true;
+		} catch(err) {
+			return false
+		}
 	}
 
 	/**
@@ -54,11 +58,24 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async killSession(name: string) : Promise<void> {
-		if(!(await this.isSession(name))) {
+		if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
 		await this._exec(`${this.options.command} kill-session -s ${name}`);
+	}
+
+	/**
+	 * Rename the session with the given name
+	 * 
+	 * @param name Session to kill
+	 */
+	public async renameSession(name: string, newName: string) : Promise<void> {
+		if(!(await this.hasSession(name))) {
+			throw new Error(`Session '${name}'does not exist`);
+		}
+
+		await this._exec(`${this.options.command} rename-session -s ${name} ${newName}`);
 	}
 
 	/**
@@ -69,7 +86,7 @@ class Tmux {
 	 * @param newline Whether the end with an eneter (Execute input). Defaults to false
 	 */
 	public async writeInput(name: string, print: string, newline: boolean = false) : Promise<void> {
-		if(!(await this.isSession(name))) {
+		if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
