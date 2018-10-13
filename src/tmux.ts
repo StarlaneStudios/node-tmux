@@ -33,7 +33,8 @@ class Tmux {
 	 * List of sessions currently active
 	 */
 	public async getSessions() : Promise<string[]> {
-		const out = await this._exec(`${this.options.command} ls -F "#S"`);
+		const out = await this._exec(`${this.options.command} ls -F "#S"`, true);
+		if(!out) return [];
 		return out.split('\n').filter(s => !!s);
 	}
 
@@ -82,10 +83,10 @@ class Tmux {
 	 * 
 	 * @param command Command to execute
 	 */
-	private _exec(command: string) : Promise<string> {
+	private _exec(command: string, ignoreError: boolean = false) : Promise<string> {
 		return new Promise((success, reject) => {
-			exec(command, this.options, (err, stdout, stderr) => {
-				if(err) {
+			exec(command, this.options, (err, stdout) => {
+				if(err && !ignoreError) {
 					reject(err);
 				} else {
 					success(stdout);
@@ -102,7 +103,11 @@ class Tmux {
  */
 export function tmux(options: NodeTmuxOptions = {}) : Promise<Tmux> {
 	return new Promise((success, reject) => {
-		let process = exec(`${options.command || "tmux"} -V`, {
+		const cmd = `${options.command || "tmux"} -V`;
+
+		console.log(cmd);
+
+		let process = exec(cmd, {
 			shell: options.shell
 		});
 
@@ -110,7 +115,7 @@ export function tmux(options: NodeTmuxOptions = {}) : Promise<Tmux> {
 			if(code == 0) {
 				success(new Tmux(options));
 			} else {
-				reject(new Error("Failed to locate tmux command"));
+				reject(new Error(`Failed to locate tmux command (exit code ${code})`));
 			}
 		});
 	});
