@@ -4,8 +4,11 @@
 	"description": "Lightweight tmux session management wrapper",
 	"main": "index.js",
 	"repository": "https://github.com/ExodiusStudios/node-tmux.git",
-	"author": "Julian Mills <minecraftmacjuul@gmail.com>",
-	"license": "MIT",
+	"bugs": {
+		"url" : "https://github.com/ExodiusStudios/node-tmux/issues"
+	},
+	"author": "Julian Mills <julian.exodius@gmail.com>",
+	"license": "ISC",
 	"keywords": [
 		"tmux",
 		"wrapper",
