@@ -2,7 +2,7 @@ import NodeTmuxOptions from "./options";
 import {exec} from "child_process";
 
 /* The format prevents  */
-const NAME_FORMAT = /[^"';]+/;
+const NAME_FORMAT = /^[^"';]+$/;
 
 /**
  * An adapter class containing methods to execute common
@@ -133,11 +133,7 @@ class Tmux {
 	 * @param name Session name
 	 */
 	private _validate(name: string) {
-		console.log("Name = ", name);
-		console.log("Format = ", NAME_FORMAT);
-		const res = NAME_FORMAT.test(name);
-		console.log("Res = ", res);
-		return res;
+		return NAME_FORMAT.test(name);
 	}
 
 }
