@@ -127,6 +127,11 @@ class Tmux {
 		})
 	};
 
+	/**
+	 * Validate the given session name
+	 * 
+	 * @param name Session name
+	 */
 	private _validate(name: string) {
 		console.log("Name = ", name);
 		console.log("Format = ", NAME_FORMAT);
