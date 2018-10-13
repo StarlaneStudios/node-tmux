@@ -2,7 +2,7 @@ import NodeTmuxOptions from "./options";
 import {exec} from "child_process";
 
 /* The format prevents  */
-const NAME_FORMAT = /[a-zA-Z0-9_\-@\/\\\.]+/g;
+const NAME_FORMAT = /[a-zA-Z0-9_\-@\/\\\.|+]{0,35}/;
 
 /**
  * An adapter class containing methods to execute common
