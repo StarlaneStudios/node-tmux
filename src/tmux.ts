@@ -122,8 +122,6 @@ export function tmux(options: NodeTmuxOptions = {}) : Promise<Tmux> {
 	return new Promise((success, reject) => {
 		const cmd = `${options.command || "tmux"} -V`;
 
-		console.log(cmd);
-
 		let process = exec(cmd, {
 			shell: options.shell
 		});
