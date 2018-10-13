@@ -102,7 +102,7 @@ class Tmux {
  */
 export function tmux(options: NodeTmuxOptions = {}) : Promise<Tmux> {
 	return new Promise((success, reject) => {
-		let process = exec(`${options.command || "tmux"} ls`, {
+		let process = exec(`${options.command || "tmux"} -V`, {
 			shell: options.shell
 		});
 
