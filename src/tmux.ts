@@ -1,6 +1,9 @@
 import NodeTmuxOptions from "./options";
 import {exec} from "child_process";
 
+/* The format prevents  */
+const NAME_FORMAT = /[a-zA-Z0-9_\-@\/\\\.]+/g;
+
 /**
  * An adapter class containing methods to execute common
  * tmux operations.
@@ -20,7 +23,9 @@ class Tmux {
 	 * @param command Optional command to execute
 	 */
 	public async newSession(name: string, command?: string) : Promise<void> {
-		if(await this.hasSession(name)) {
+		if(!NAME_FORMAT.test(name) || name.length > 50) {
+			throw new Error(`Illegal session name`);
+		} else if(await this.hasSession(name)) {
 			throw new Error(`Session '${name}' already exists`);
 		}
 
@@ -44,6 +49,10 @@ class Tmux {
 	 * @param name Session to check
 	 */
 	public async hasSession(name: string) : Promise<boolean> {
+		if(!NAME_FORMAT.test(name) || name.length > 50) {
+			throw new Error(`Illegal session name`);
+		}
+
 		try {
 			await this._exec(`${this.options.command} has-session -t ${name}`);
 			return true;
@@ -58,7 +67,9 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async killSession(name: string) : Promise<void> {
-		if(!(await this.hasSession(name))) {
+		if(!NAME_FORMAT.test(name) || name.length > 50) {
+			throw new Error(`Illegal session name`);
+		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
@@ -71,7 +82,9 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async renameSession(name: string, newName: string) : Promise<void> {
-		if(!(await this.hasSession(name))) {
+		if(!NAME_FORMAT.test(name) || name.length > 50) {
+			throw new Error(`Illegal session name`);
+		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
@@ -86,7 +99,9 @@ class Tmux {
 	 * @param newline Whether the end with an eneter (Execute input). Defaults to false
 	 */
 	public async writeInput(name: string, print: string, newline: boolean = false) : Promise<void> {
-		if(!(await this.hasSession(name))) {
+		if(!NAME_FORMAT.test(name) || name.length > 50) {
+			throw new Error(`Illegal session name`);
+		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
 		}
 
