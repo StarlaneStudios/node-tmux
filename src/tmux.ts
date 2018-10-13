@@ -23,7 +23,7 @@ class Tmux {
 	 * @param command Optional command to execute
 	 */
 	public async newSession(name: string, command?: string) : Promise<void> {
-		if(!NAME_FORMAT.test(name) || name.length > 50) {
+		if(!this._validate(name) || name.length > 50) {
 			throw new Error(`Illegal session name`);
 		} else if(await this.hasSession(name)) {
 			throw new Error(`Session '${name}' already exists`);
@@ -49,7 +49,7 @@ class Tmux {
 	 * @param name Session to check
 	 */
 	public async hasSession(name: string) : Promise<boolean> {
-		if(!NAME_FORMAT.test(name) || name.length > 50) {
+		if(!this._validate(name) || name.length > 50) {
 			throw new Error(`Illegal session name`);
 		}
 
@@ -67,7 +67,7 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async killSession(name: string) : Promise<void> {
-		if(!NAME_FORMAT.test(name) || name.length > 50) {
+		if(!this._validate(name) || name.length > 50) {
 			throw new Error(`Illegal session name`);
 		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
@@ -82,7 +82,7 @@ class Tmux {
 	 * @param name Session to kill
 	 */
 	public async renameSession(name: string, newName: string) : Promise<void> {
-		if(!NAME_FORMAT.test(name) || name.length > 50) {
+		if(!this._validate(name) || name.length > 50) {
 			throw new Error(`Illegal session name`);
 		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
@@ -99,7 +99,7 @@ class Tmux {
 	 * @param newline Whether the end with an eneter (Execute input). Defaults to false
 	 */
 	public async writeInput(name: string, print: string, newline: boolean = false) : Promise<void> {
-		if(!NAME_FORMAT.test(name) || name.length > 50) {
+		if(!this._validate(name) || name.length > 50) {
 			throw new Error(`Illegal session name`);
 		} else if(!(await this.hasSession(name))) {
 			throw new Error(`Session '${name}'does not exist`);
@@ -126,6 +126,14 @@ class Tmux {
 			});
 		})
 	};
+
+	private _validate(name: string) {
+		console.log("Name = ", name);
+		console.log("Format = ", NAME_FORMAT);
+		const res = NAME_FORMAT.test(name);
+		console.log("Res = ", res);
+		return res;
+	}
 
 }
 
