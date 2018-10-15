@@ -8,7 +8,7 @@ const NAME_FORMAT = /^[^"';]+$/;
  * An adapter class containing methods to execute common
  * tmux operations.
  */
-class Tmux {
+export class Tmux {
 
 	private options: NodeTmuxOptions;
 

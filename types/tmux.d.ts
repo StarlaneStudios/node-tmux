@@ -3,7 +3,7 @@ import NodeTmuxOptions from "./options";
  * An adapter class containing methods to execute common
  * tmux operations.
  */
-declare class Tmux {
+export declare class Tmux {
     private options;
     constructor(options: NodeTmuxOptions);
     /**
@@ -61,4 +61,3 @@ declare class Tmux {
  * cannot be found or executed properly.
  */
 export declare function tmux(options?: NodeTmuxOptions): Promise<Tmux>;
-export {};
