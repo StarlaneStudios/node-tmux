@@ -1,8 +1,9 @@
 {
 	"name": "node-tmux",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Lightweight tmux session management wrapper",
 	"main": "index.js",
+	"types": "./types/tmux.d.ts",
 	"repository": "https://github.com/ExodiusStudios/node-tmux.git",
 	"bugs": {
 		"url" : "https://github.com/ExodiusStudios/node-tmux/issues"
